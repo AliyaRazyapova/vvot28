@@ -25,8 +25,21 @@ async def get_object_from_bucket(object_key, access_key, secret_key, bucket_name
         return None
 
 
+# Функция для поиска вопроса в бакете, который соответствует запросу пользователя
+async def find_matching_question(user_question, bucket_content):
+    # Предположим, что вопросы в бакете разделены строками
+    questions = bucket_content.split("\n")
+
+    # Поиск подходящего вопроса
+    for question in questions:
+        if user_question.lower() in question.lower():  # Пытаемся найти совпадение с вопросом
+            return question
+
+    return None
+
+
 # Отправка запроса к Yandex GPT с использованием aiohttp
-async def send_request_to_gpt(question):
+async def send_request_to_gpt(user_question):
     bucket_content = await get_object_from_bucket(
         variables.YANDEX_STORAGE_OBJECT_KEY,
         variables.YANDEX_ACCESS_KEY,
@@ -36,11 +49,17 @@ async def send_request_to_gpt(question):
     if not bucket_content:
         return None
 
+    # Ищем соответствующий вопрос в контенте бакета
+    matching_question = await find_matching_question(user_question, bucket_content)
+    if not matching_question:
+        return "Я не нашел подходящий вопрос в базе данных."
+
+    # Отправляем запрос к GPT с найденным вопросом
     data = {
         "modelUri": f"gpt://{variables.YANDEX_FOLDER_ID}/yandexgpt",
         "messages": [
-            {"role": "system", "text": bucket_content},
-            {"role": "user", "text": question},
+            {"role": "system", "text": "Пожалуйста, ответь на вопрос: "},
+            {"role": "user", "text": matching_question},
         ],
     }
 
@@ -74,19 +93,22 @@ async def send_request_to_gpt(question):
 async def handle_text_message(update: Update, context: CallbackContext):
     user_question = update.message.text
 
-    await update.message.reply_text("Я ищу ответ... Подождите немного.")
+    await update.message.reply_text("Я ищу ответы... Подождите немного.")
 
-    # Генерация ответа через Yandex GPT
-    try:
-        response_text = await send_request_to_gpt(user_question)
+    # Разделяем сообщение на несколько вопросов (по точке и вопросительному знаку)
+    questions = [q.strip() for q in user_question.split('?') if q.strip()]
 
-        if response_text:
-            await update.message.reply_text(response_text)
-        else:
-            await update.message.reply_text("Ответ не найден.")
-    except Exception as e:
-        print(f"Ошибка при запросе к Yandex GPT: {e}")
-        await update.message.reply_text("Не удалось получить ответ. Попробуйте позже.")
+    # Генерация ответов для каждого вопроса
+    responses = []
+    for question in questions:
+        try:
+            response_text = await send_request_to_gpt(question)
+            responses.append(f"Вопрос: {question}\nОтвет: {response_text}")
+        except Exception as e:
+            print(f"Ошибка при запросе к Yandex GPT: {e}")
+            responses.append(f"Не удалось получить ответ на вопрос: {question}")
+
+    await update.message.reply_text("\n\n".join(responses))
 
 
 # /start
