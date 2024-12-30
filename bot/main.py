@@ -8,7 +8,7 @@ TELEGRAM_BOT_TOKEN = variables.TELEGRAM_BOT_TOKEN
 
 # /start
 async def start(update: Update, context: CallbackContext):
-    await update.message.reply_text("Привет! Я бот. Отправьте команду /help для получения помощи.")
+    await update.message.reply_text("Я помогу подготовить ответ на экзаменационный вопрос по дисциплине 'Операционные системы'.\n Пришлите мне фотографию с вопросом или наберите его текстом.")
 
 
 # /help
