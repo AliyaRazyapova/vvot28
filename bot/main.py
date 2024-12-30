@@ -1,5 +1,4 @@
 import aiohttp
-import json
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
@@ -44,14 +43,6 @@ async def send_request_to_gpt(question):
             {"role": "user", "text": question},
         ],
     }
-
-    try:
-        with open('request.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        print("Данные запроса сохранены в request.json")
-    except Exception as e:
-        print(f"Ошибка при записи в файл request.json: {e}")
-        return None
 
     try:
         headers = {
