@@ -56,7 +56,7 @@ crash.log
 .terraform/
 
 # Sensitive files
-key.json
+terraform/key.json
 
 venv
 .idea

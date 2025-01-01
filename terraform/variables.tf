@@ -18,3 +18,13 @@ variable "service_account_key_file" {
   description = "Путь к ключу учетной записи"
   type        = string
 }
+
+variable "tg_bot_key" {
+  description = "Токен для доступа к Telegram Bot API"
+  type        = string
+}
+
+variable "cloud_function_url" {
+  description = "URL для облачной функции"
+  type        = string
+}
