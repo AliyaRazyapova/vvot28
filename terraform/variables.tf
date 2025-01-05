@@ -22,7 +22,7 @@ variable "tg_bot_key" {
 variable "bucket_name" {
   type        = string
   description = "Название бакета, в котором находится объект с инструкцией к YandexGPT"
-  default     = "exam-solver-tg-bot-bucket09876543"
+  default     = "tg-bot-bucket-098"
 }
 
 variable "bucket_object_key" {

@@ -29,7 +29,7 @@ data "archive_file" "content" {
 }
 
 resource "yandex_function" "tg_bot" {
-  name               = "tg_bot"
+  name               = "tg-bot"
   description        = <<EOT
                        Функция принимает текстовые и мультимедийные
                        сообщения (фото), полученные от пользователей

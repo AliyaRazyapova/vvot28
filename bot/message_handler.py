@@ -45,7 +45,7 @@ def handle_text_message(text, message, iam_token):
 
 
 def handle_photo_message(photo, message, iam_token):
-    if len(photo) > 3:
+    if len(photo) > 1:
         send_message("Я могу обработать только одну фотографию.", message)
         return
 
