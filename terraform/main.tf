@@ -30,7 +30,12 @@ data "archive_file" "content" {
 
 resource "yandex_function" "tg_bot" {
   name               = "tg_bot"
-  description        = Функция
+  description        = <<EOT
+                       Функция принимает текстовые и мультимедийные
+                       сообщения (фото), полученные от пользователей
+                       Telegram-бота, и, используя YandexGPT,
+                       генерирует ответы на их вопросы
+                       EOT
   entrypoint         = "main.handler"
   memory             = "128"
   runtime            = "python312"
