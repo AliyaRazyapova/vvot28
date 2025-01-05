@@ -1,30 +1,32 @@
 variable "cloud_id" {
-  description = "ID облака"
   type        = string
+  description = "Идентификатор облака по умолчанию"
 }
 
 variable "folder_id" {
-  description = "ID каталога"
   type        = string
+  description = "Идентификатор каталога по умолчанию"
 }
 
-variable "zone" {
-  description = "Зона размещения ресурсов"
+variable "sa_key_file_path" {
   type        = string
-  default     = "ru-central1-a"
-}
-
-variable "service_account_key_file" {
-  description = "Путь к ключу учетной записи"
-  type        = string
+  description = "Путь к ключу сервисного аккаунта с ролью admin"
+  default     = "key.json"
 }
 
 variable "tg_bot_key" {
-  description = "Токен для доступа к Telegram Bot API"
   type        = string
+  description = "Токен telegram-бота"
 }
 
-variable "cloud_function_url" {
-  description = "URL для облачной функции"
+variable "bucket_name" {
   type        = string
+  description = "Название бакета, в котором находится объект с инструкцией к YandexGPT"
+  default     = "exam-solver-tg-bot-bucket09876543"
+}
+
+variable "bucket_object_key" {
+  type        = string
+  description = "Ключ объекта, в котором написана инструкция к YandexGPT"
+  default     = "instruction.txt"
 }
